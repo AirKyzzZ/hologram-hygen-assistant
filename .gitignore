@@ -33,3 +33,14 @@ coverage/
 
 # Misc
 *.tsbuildinfo
+
+# Cloned repos (for reference only, don't commit)
+demos-deploy/
+hologram-concieragent-demo-vs/
+vs-agent/
+hologram-docs/
+
+# Helm chart dependencies
+charts/charts/
+charts/*.tgz
+
