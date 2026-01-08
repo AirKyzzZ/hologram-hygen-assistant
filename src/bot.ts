@@ -1,6 +1,7 @@
 import express from 'express'
 import http from 'http'
 import path from 'path'
+import { Socket } from 'net'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { HealthController, MessageController, ConnectionController } from './controllers'
 import { liveAvatarService } from './services'
@@ -170,7 +171,7 @@ const server = http.createServer(app)
 
 // Handle WebSocket upgrade requests
 server.on('upgrade', (req, socket, head) => {
-  wsProxy.upgrade(req, socket as any, head)
+  wsProxy.upgrade(req, socket as Socket, head)
 })
 
 // Start server
