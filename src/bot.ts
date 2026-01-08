@@ -39,6 +39,7 @@ app.use(express.static(path.join(__dirname, '../public')))
 app.get('/.well-known/did.json', async (_req, res) => {
   try {
     const response = await fetch(`${vsAgentPublicUrl}/.well-known/did.json`)
+    res.status(response.status)
     const data = await response.json()
     res.json(data)
   } catch (error) {
@@ -51,6 +52,7 @@ app.get('/.well-known/did.json', async (_req, res) => {
 app.get('/vt/:file', async (req, res) => {
   try {
     const response = await fetch(`${vsAgentPublicUrl}/vt/${req.params.file}`)
+    res.status(response.status)
     const data = await response.json()
     res.json(data)
   } catch (error) {
@@ -62,10 +64,20 @@ app.get('/vt/:file', async (req, res) => {
 // Proxy anoncreds
 app.use('/anoncreds', async (req, res) => {
   try {
-    const response = await fetch(`${vsAgentPublicUrl}/anoncreds${req.url}`, {
+    const options: RequestInit = {
       method: req.method,
-      headers: { 'Content-Type': 'application/json' },
-    })
+      headers: {
+        'Content-Type': 'application/json',
+        ...(req.headers.authorization ? { Authorization: req.headers.authorization } : {}),
+      },
+    }
+
+    if (['POST', 'PUT', 'PATCH'].includes(req.method) && req.body) {
+      options.body = JSON.stringify(req.body)
+    }
+
+    const response = await fetch(`${vsAgentPublicUrl}/anoncreds${req.url}`, options)
+    res.status(response.status)
     const data = await response.json()
     res.json(data)
   } catch (error) {
