@@ -12,8 +12,8 @@ const config = getAppConfig()
 const port = config.port
 
 // VS Agent endpoints
-const vsAgentPublicUrl = config.vsAgentUrl.replace(':3000', ':3001')
-const vsAgentWsUrl = vsAgentPublicUrl.replace('http://', 'ws://')
+const vsAgentPublicUrl = config.vsAgentUrl.replace(/:3000(?:\/|$)/, ':3001')
+const vsAgentWsUrl = vsAgentPublicUrl.replace(/^http/, 'ws')
 
 // Initialize controllers
 const messageController = new MessageController()
