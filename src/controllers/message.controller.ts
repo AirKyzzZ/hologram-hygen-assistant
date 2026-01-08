@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { MessageReceivedDto } from '../dto'
 import { getAppConfig } from '../config'
-import { liveAvatarService } from '../services'
+import { liveAvatarService, vsAgentService } from '../services'
 
 /**
  * Message controller - handles incoming messages from users
@@ -13,6 +13,14 @@ export class MessageController {
     async handleMessageReceived(req: Request, res: Response): Promise<void> {
         try {
             const body = req.body as MessageReceivedDto
+
+            // Input validation
+            if (!body?.message?.content || !body?.message?.connectionId) {
+                console.error('❌ Invalid message payload:', JSON.stringify(body))
+                res.status(400).json({ error: 'Invalid message payload' })
+                return
+            }
+
             const message = body.message
             const connectionId = message.connectionId
             const content = message.content.toLowerCase().trim()
@@ -40,8 +48,8 @@ export class MessageController {
                 responseContent = `👋 Hi! I'm the Live Avatar agent.\n\nSay \`start\` or \`/start\` to begin a video conversation with the avatar!`
             }
 
-            // Send text response
-            await this.sendMessage(connectionId, {
+            // Send text response using shared service
+            await vsAgentService.sendMessage(connectionId, {
                 type: 'text',
                 connectionId,
                 content: responseContent,
@@ -49,7 +57,7 @@ export class MessageController {
 
             // Send avatar link if needed
             if (sendAvatarLink) {
-                await this.sendMessage(connectionId, {
+                await vsAgentService.sendMessage(connectionId, {
                     type: 'media',
                     connectionId,
                     items: [
@@ -68,22 +76,6 @@ export class MessageController {
         } catch (error) {
             console.error('❌ Error processing message:', error)
             res.status(500).json({ error: 'Internal server error' })
-        }
-    }
-
-    /**
-     * Send a message via VS Agent
-     */
-    private async sendMessage(connectionId: string, message: object): Promise<void> {
-        const vsAgentUrl = getAppConfig().vsAgentUrl
-        const response = await fetch(`${vsAgentUrl}/v1/message`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(message),
-        })
-
-        if (!response.ok) {
-            console.error(`❌ Failed to send message: ${response.statusText}`)
         }
     }
 }

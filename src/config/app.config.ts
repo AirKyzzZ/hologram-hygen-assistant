@@ -17,9 +17,9 @@ export interface AppConfig {
 
 export function getAppConfig(): AppConfig {
     return {
-        port: parseInt(process.env.PORT || '3001', 10),
+        port: parseInt(process.env.PORT || '4001', 10),
         vsAgentUrl: process.env.VS_AGENT_URL || 'http://localhost:3000',
-        publicUrl: process.env.PUBLIC_URL || 'http://localhost:3001',
+        publicUrl: process.env.PUBLIC_URL || 'http://localhost:4001',
         liveavatar: {
             apiKey: process.env.LIVEAVATAR_API_KEY || '',
             apiUrl: process.env.LIVEAVATAR_API_URL || 'https://api.liveavatar.com',

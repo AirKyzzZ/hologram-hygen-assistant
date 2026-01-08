@@ -42,7 +42,7 @@ fi
 echo -e "${GREEN}📋 Configuration:${NC}"
 echo -e "  Public Domain: ${NGROK_DOMAIN}"
 echo -e "  Local IP: ${LOCAL_IP}"
-echo -e "  Events URL: http://${LOCAL_IP}:3001"
+echo -e "  Events URL: http://${LOCAL_IP}:4001"
 echo ""
 
 # Stop and remove existing container if it exists
@@ -59,8 +59,8 @@ docker run -d \
   -p 3000:3000 \
   -e AGENT_PUBLIC_DID=did:web:${NGROK_DOMAIN} \
   -e AGENT_LABEL="LiveAvatar Agent" \
-  -e AGENT_INVITATION_IMAGE_URL="https://hologram.zone/logo.png" \
-  -e EVENTS_BASE_URL=http://${LOCAL_IP}:3001 \
+  -e AGENT_INVITATION_IMAGE_URL="https://raw.githubusercontent.com/2060-io/vs-agent/main/assets/hologram-logo.png" \
+  -e EVENTS_BASE_URL=http://${LOCAL_IP}:4001 \
   -e USE_CORS=true \
   --name vs-agent \
   io2060/vs-agent:dev

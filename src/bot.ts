@@ -64,7 +64,7 @@ app.get('/invitation', async (req, res) => {
   try {
     // Fetch the invitation URL from VS Agent
     const response = await fetch(`${config.vsAgentUrl}/v1/invitation`)
-    const data = await response.json()
+    const data = (await response.json()) as { url?: string }
 
     if (data.url) {
       // Create a nice HTML page with QR code
