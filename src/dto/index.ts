@@ -3,20 +3,20 @@
  */
 
 export interface MessageReceivedDto {
-    message: {
-        connectionId: string
-        type: string
-        content: string
-        threadId?: string
-    }
+  message: {
+    connectionId: string
+    type: string
+    content: string
+    threadId?: string
+  }
 }
 
 export interface ConnectionEstablishedDto {
-    connectionId: string
-    language?: string
+  connectionId: string
+  language?: string
 }
 
 export interface WelcomeResponseDto {
-    message: string
-    avatarLink: string
+  message: string
+  avatarLink: string
 }
